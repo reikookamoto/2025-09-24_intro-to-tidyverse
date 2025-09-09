@@ -1,0 +1,390 @@
+---
+title: "Introduction to dplyr"
+author: "Reiko Okamoto"
+date: "2025-09-24"
+format: gfm
+---
+
+## 👋 Welcome to the tidyverse
+
+### What is the tidyverse?
+
+The [tidyverse](https://www.tidyverse.org/) is a collection of R packages for data science. Today, we will be using [`dplyr`](https://dplyr.tidyverse.org/) for data manipulation and [`ggplot2`](https://ggplot2.tidyverse.org/) for data visualization.
+
+### Why learn it?
+
+Many concepts you learn with the tidyverse (e.g., creating plots, filtering data) translate to other programming languages like Python and SQL. This foundation helps you pick up those languages more quickly later. The tidyverse also allows you analyze data in a transparent and reproducible way, so others can easily follow how you reached your conclusions.
+
+### Keep in mind...
+
+Please don't feel like you need to memorize everything! Even experienced data scientist don't know everything off the top of their heads. My main goal today is to pique your interest in using the tidyverse for data analysis.
+
+## 🐧 Palmer penguins
+
+![Artwork by [\@allison_horst](https://allisonhorst.com/allison-horst)](../imgs/penguins.png){fig-align="center" width="600"}
+
+We'll use the `penguins` data set from the [`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/) package. It contains measurements for adult penguins observed in a group of islands off the coast of the Antarctic Peninsula. The data were collected and made available by Dr. Kristen Gorman and the Palmer Long-Term Ecological Research (LTER) program. This data set is concise but offers a diverse mix of data types and features, making it an excellent resource for learning the tidyverse.
+
+#### *Load packages*
+
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+```
+
+-   Each time you start a new R session, you need to load the R packages that you want to use.
+
+#### *Open the documentation*
+
+```{r}
+?penguins
+```
+
+![Artwork by [\@allison_horst](https://allisonhorst.com/allison-horst)](../imgs/culmen_depth.png){fig-align="center" width="600"}
+
+## 1️⃣ Get a "glimpse" of your data
+
+#### *Inspect the data*
+
+```{r}
+glimpse(penguins)
+```
+
+-   How many rows does the data set have?
+-   How many columns?
+-   How many data types?
+-   Are there any missing values?
+
+## 2️⃣ Keep or drop columns
+
+Sometimes, to keep our outputs more focused and easy to work with, we only keep the columns we care about.
+
+#### *Select one column by name*
+
+```{r}
+select(penguins, species)
+```
+
+#### *Select multiple columns by name*
+
+```{r}
+# option 1
+select(penguins, species, island)
+```
+
+```{r}
+# option 2: combine selections
+select(penguins, c(species, island))
+```
+
+#### *Select everything except certain columns*
+
+```{r}
+select(penguins, -species, -island)
+```
+
+#### *Select columns that start with "bill"*
+
+```{r}
+select(penguins, starts_with("bill"))
+```
+
+-   Similar functions, such as `ends_with()` and `contains()`, are also available for selecting columns based on how their names end or whether they contain specific characters.
+
+#### *Select numeric variables*
+
+```{r}
+select(penguins, where(is.numeric))
+```
+
+## 3️⃣ Keep rows that match a condition
+
+Sometimes, we filter our data set to keep only the observations that meet certain conditions.
+
+#### *Filter the data to keep only penguins belonging to the Gentoo species*
+
+```{r}
+filter(penguins, species == "Gentoo")
+```
+
+#### *Filter the data to keep only penguins belonging to the Adelie species on Torgersen Island*
+
+```{r}
+filter(penguins, species == "Adelie", island == "Torgersen")
+```
+
+-   The comma acts like an AND operator: both conditions must be `TRUE` for a row to be kept.
+
+#### *Filter the data to keep penguins belonging to the Adelie or Gentoo species*
+
+```{r}
+# option 1: OR operator
+filter(penguins, species == "Adelie" | species == "Gentoo")
+```
+
+-   The vertical bar is the OR operator: a row is kept if at least one condition is `TRUE`.
+
+```{r}
+# option 2: inequality operator
+filter(penguins, species != "Chinstrap")
+```
+
+### ✏️ Exercise 1
+
+a.  Select the `sex` and `year` columns from the data.
+b.  Filter the data to keep only penguins whose bill length is greater than 40 mm.
+c.  Filter the data to keep penguins on either Biscoe Island or Torgersen Island.
+
+```{r}
+select(penguins, sex, year)
+filter(penguins, bill_length_mm > 40)
+filter(penguins, island == "Biscoe" | island == "Torgersen")
+```
+
+## 4️⃣ Pipes
+
+#### *First, filter the data to keep only penguins belonging to the Adelie species, then select columns that start with "bill"*
+
+```{r}
+select(filter(penguins, species == "Adelie"), starts_with("bill"))
+```
+
+-   This works, but nested functions can be hard to read because you have to read the code inside-out. This is how I look trying to read code with deep nesting...
+
+![](../imgs/pingu-crying.jpg){fig-align="center" width="600"}
+
+#### *Use the pipe to rewrite the code in a cleaner way*
+
+Keyboard shortcut: **Ctrl/Cmd + Shift + M**
+
+```{r}
+penguins |> 
+  filter(species == "Adelie") |> 
+  select(starts_with("bill"))
+```
+
+-   The pipe allows us to pass the output of one function directly to the next. This makes our code easier to read because the operations flow left to right, just like English and French.
+
+### ✏️ Exercise 2
+
+a.  Using the pipe, filter the data to keep only female penguins, then select the `species` and `body_mass_g` columns.
+
+```{r}
+penguins |> 
+  filter(sex == "female") |> 
+  select(species, body_mass_g)
+```
+
+## 5️⃣ Create and modify columns
+
+In data analysis, it's common to derive new variables from existing ones.
+
+#### *Create a new column by converting an existing one from grams to kilograms*
+
+```{r}
+penguins |> 
+  mutate(body_mass_kg = body_mass_g / 1000)
+```
+
+#### *Create a column that classifies flipper length into two categories*
+
+```{r}
+penguins |> 
+  mutate(flipper_size = if_else(flipper_length_mm >= 200, "long", "short"))
+```
+
+#### *Create a column that classifies flipper length into three categories*
+
+```{r}
+penguins |> 
+  mutate(
+    flipper_size = case_when(
+      flipper_length_mm < 190 ~ "short",
+      flipper_length_mm < 200 ~ "medium",
+      flipper_length_mm >= 200 ~ "long",
+      .default = NA
+    )
+  )
+```
+
+-   Use `if_else()` when you only have two options. Use `case_when()` when you need to handle multiple conditions and return different values for each.
+
+#### *Round values in multiple columns at the same time*
+
+```{r}
+penguins |> 
+  mutate(
+    across(.cols = c(bill_length_mm, bill_depth_mm), .fns = round)
+  )
+```
+
+## 6️⃣ Compute summary statistics
+
+We often need to summarize our data to understand its key characteristics (e.g., measures of central tendency and variation).
+
+#### *Calculate the mean body mass for all penguins*
+
+```{r}
+penguins |> 
+  summarise(mean_body_mass = mean(body_mass_g, na.rm = TRUE))
+```
+
+## 7️⃣ Group by one or more variables
+
+A common task in data analysis is to split the data into groups, apply a function to each group, and then combine the results. This is known as the split-apply-combine paradigm.
+
+#### *Calculate the mean body mass for each species*
+
+```{r}
+penguins |> 
+  group_by(species) |> 
+  summarise(mean_body_mass = mean(body_mass_g, na.rm = TRUE))
+```
+
+-   A grouped data frame has all the properties of a regular data frame, but also includes information about the grouping structure. R treats each group as if it were a separate data frame, so operations within `summarise()` are applied to each group individually and then combined back together.
+
+#### *Count the number of penguins on each island*
+
+```{r}
+# option 1
+penguins |> 
+  group_by(island) |> 
+  tally()
+```
+
+```{r}
+# option 2: combines `group_by()` and `tally()`
+penguins |> 
+  count(island)
+```
+
+#### *Calculate the mean and standard deviation of body mass for each combination of species and sex*
+
+```{r}
+penguins |> 
+  group_by(species, sex) |> 
+  summarise(
+    mean_body_mass = mean(body_mass_g, na.rm = TRUE),
+    sd_body_mass = sd(body_mass_g, na.rm = TRUE) 
+  )
+```
+
+-   You can compute multiple summary statistics in one `summarise()` call by separating each calculation with a comma.
+
+#### *Remove grouping*
+
+By default, when we group by multiple variables, `dplyr` reduces the grouping level by one after summarizing. We might want to remove all remaining grouping structure for subsequent operations (e.g., plotting).
+
+```{r}
+# option 1
+penguins |> 
+  group_by(species, sex) |> 
+  summarise(
+    mean_body_mass = mean(body_mass_g, na.rm = TRUE),
+    sd_body_mass = sd(body_mass_g, na.rm = TRUE) 
+  ) |> 
+  ungroup()
+```
+
+```{r}
+# option 2
+penguins |> 
+  group_by(species, sex) |> 
+  summarise(
+    mean_body_mass = mean(body_mass_g, na.rm = TRUE),
+    sd_body_mass = sd(body_mass_g, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+## 8️⃣ Sort and subset data
+
+#### *Extract the largest body mass*
+
+1.  Use `arrange()` to sort the data by body mass in descending order.
+2.  Use `slice()` to select the row with the largest body mass.
+3.  Use `pull()` to extract the value as a numeric vector.
+
+```{r}
+penguins |> 
+  arrange(desc(body_mass_g)) |> 
+  slice(1) |> 
+  pull(body_mass_g)
+```
+
+-   Tip: `dplyr` also provides helper functions such as [`slice_min()`](https://dplyr.tidyverse.org/reference/slice.html) to simply row selection for common use cases.
+
+### ✏️ Exercise 3
+
+Perform the following tasks using the verbs we've learned, chaining everything together with the pipe:
+
+-   Select the following columns: `island`, `species`, and `flipper_length_mm`
+-   Calculate the average and maximum flipper length for each combination of `island` and `species`
+-   Sort the results by average flipper length
+
+```{r}
+penguins |> 
+  select(island, species, flipper_length_mm) |> 
+  group_by(island, species) |> 
+  summarise(
+    avg_flipper_len = mean(flipper_length_mm, na.rm = TRUE),
+    max_flipper_len = max(flipper_length_mm, na.rm = TRUE)
+  ) |> 
+  arrange(avg_flipper_len)
+```
+
+![](../imgs/pingu-adventure.jpg){fig-align="center" width="600"}
+
+Awesome work! You're ready to tackle new data adventures.
+
+## ⭐Bonus: lengthen and widen data
+
+The [`tidyr`](https://tidyr.tidyverse.org/) package is another key component of the tidyverse. It focuses on reshaping data to ensure it's in the right format for analysis.
+
+Data can be in a "long" format (more rows, fewer columns) or in a "wide" format (more columns, fewer rows).
+
+By default, the `penguins` data set is arranged so that each row represents a penguin. But what if we wanted our observation of interest to be the measurement itself, rather than the penguin? That's to say, we want to restructure the data to have the columns `id` (unique identifier of penguin), `measurement` and `value`.
+
+#### *Make the data longer*
+
+```{r}
+penguins_long <- penguins |> 
+  select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g) |> 
+  mutate(id = row_number()) |> # so we can reverse the pivot later
+  pivot_longer(
+    cols = -id,
+    names_to = "measurement_type",
+    values_to = "value"
+  )
+
+penguins_long
+```
+
+#### *Reverse the pivot by making the data wider*
+
+```{r}
+penguins_wide <- penguins_long |> 
+  pivot_wider(
+    names_from = measurement_type,
+    values_from = value
+  )
+
+penguins_long
+```
+
+## 📚 Reference
+
+| Function                | Description                                      |
+|------------------------|-----------------------------------------------|
+| `dplyr::glimpse()`      | Get a glimpse of your data                       |
+| `dplyr::select()`       | Keep or drop columns using their names and types |
+| `dplyr::filter()`       | Keep rows that match a condition                 |
+| `dplyr::mutate()`       | Create, modify, and delete columns               |
+| `dplyr::summarise()`    | Summarise each group down to one row             |
+| `dplyr::group_by()`     | Group by one or more variables                   |
+| `dplyr::count()`        | Count the observations in each group             |
+| `dplyr::arrange()`      | Order rows using column values                   |
+| `dplyr::slice()`        | Subset rows using their positions                |
+| `dplyr::pull()`         | Extract a single column                          |
+| `tidyr::pivot_longer()` | Pivot data from wide to long                     |
+| `tidyr::pivot_wider()`  | Pivot data from long to wide                     |
