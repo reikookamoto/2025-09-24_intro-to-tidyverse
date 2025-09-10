@@ -12,9 +12,11 @@ Atelier méthodologique pour le Département de science politique de l'Universit
 -   Before running the code, make sure you have the following R packages installed:
     -   `tidyverse`;
 
-    -   `here`; and
+    -   `here`;
 
-    -   `palmerpenguins`.
+    -   `palmerpenguins`; and
+
+    -   `RColorBrewer`.
 
 ## Directory structure
 
