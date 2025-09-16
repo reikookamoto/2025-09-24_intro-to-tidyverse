@@ -296,7 +296,18 @@ ggplot(sim_df, aes(x = x1, y = y)) +
 coef(mod1)
 ```
 
-## 7️⃣ Other types of plots
+## 7️⃣ Saving our masterpieces
+
+```{r}
+ggsave(
+  filename = "brittany.png",
+  plot = brittany_plot
+)
+```
+
+-   If you don't specify the `plot` argument, by default, the function will save the last plot displayed.
+
+## ⭐ Other types of plots
 
 #### *Create a box plot to visualize the distribution of the monthly number of trips from Paris-Gare-de-Lyon to each international destination*
 
@@ -310,7 +321,7 @@ df |>
   geom_boxplot()
 ```
 
-#### *Change one line of code to display the distributions as a violin plot* 
+#### *Change one line of code to display the distributions as a violin plot*
 
 ```{r}
 df |> 
@@ -324,18 +335,7 @@ df |>
 
 > While a [box plot](https://en.wikipedia.org/wiki/Box_plot) shows a summary statistics such as mean/median and interquartile ranges, the [violin plot](https://en.wikipedia.org/wiki/Violin_plot) shows the full distribution of the data. The violin plot can be used in multimodal data (more than one peak).
 
-## 8️⃣ Saving our masterpieces
-
-```{r}
-ggsave(
-  filename = "brittany.png",
-  plot = brittany_plot
-)
-```
-
--   If you don't specify the `plot` argument, by default, the function will save the last plot displayed.
-
-## ⭐ Bonus: laying out panels in a grid
+## ⭐ Laying out panels in a grid
 
 #### *Visualize how the monthly number of trips from Paris to multiple cities in Brittany changes over time*
 
@@ -352,7 +352,7 @@ df |>
   facet_wrap(vars(year))
 ```
 
-## ⭐ Bonus: modify the theme
+## ⭐ Modify the theme
 
 Theme elements are non-data components of a plot, which include things like the background colour, text size, font, and grid lines. These changes don't alter the underlying data; they only adjust the appearance of the plot. We've already seen how to modify the theme to change the angle of the axis labels. Now let's explore some of the other elements we can customize.
 
