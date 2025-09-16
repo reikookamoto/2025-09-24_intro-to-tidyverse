@@ -14,7 +14,9 @@ Atelier méthodologique pour le Département de science politique de l'Universit
 
     -   `here`;
 
-    -   `palmerpenguins`; and
+    -   `palmerpenguins`;
+
+    -   `lubridate`; and
 
     -   `RColorBrewer`.
 
