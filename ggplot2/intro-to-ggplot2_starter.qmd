@@ -15,10 +15,7 @@ execute:
 #### *Load packages*
 
 ```{r}
-library(tidyverse)
-library(here)
-library(lubridate)
-library(RColorBrewer)
+# YOUR CODE HERE
 ```
 
 ## 🔍 Exploring the sample data
@@ -31,8 +28,7 @@ library(RColorBrewer)
 #### *Read the data*
 
 ```{r}
-df <- readr::read_csv(here("data", "train-delays.csv"))
-df
+# YOUR CODE HERE
 ```
 
 -   Reading in a CSV file with [`readr`](https://readr.tidyverse.org/) (part of the tidyverse) is a typical starting point for many analyses.
@@ -54,8 +50,7 @@ df
 | `num_arriving_late`       | double    | Number of trains arriving late  |
 
 ```{r}
-head(df)
-tail(df)
+# YOUR CODE HERE
 ```
 
 -   Each row summarizes information on trips from one station to another for a given year and month.
@@ -68,9 +63,7 @@ tail(df)
 #### *Visualize the distribution of average journey time*
 
 ```{r}
-df |> 
-  ggplot(aes(x = journey_time_avg)) +
-  geom_histogram()
+# YOUR CODE HERE
 ```
 
 -   The distribution of average journey time is skewed to the right.
@@ -85,10 +78,7 @@ df |>
 #### *Visualize the relationship between average journey time and average arrival delay*
 
 ```{r}
-df |> 
-  dplyr::filter(avg_delay_all_arriving > 0) |>
-  ggplot(aes(x = journey_time_avg, y = avg_delay_all_arriving)) +
-  geom_point()
+# YOUR CODE HERE
 ```
 
 -   It looks as though the variance of delay increases as the average journey time increases. For journeys that average \<1 hour, arrival delays seem to be \<10 minutes. Meanwhile, for journeys that average 5 hours, arrival delays seem to be \<30 minutes.
@@ -96,42 +86,25 @@ df |>
 #### *Change the transparency of the points*
 
 ```{r}
-df |> 
-  dplyr::filter(avg_delay_all_arriving > 0) |>
-  ggplot(aes(x = journey_time_avg, y = avg_delay_all_arriving)) +
-  geom_point(alpha = 0.5)
+# YOUR CODE HERE
 ```
 
 #### *Change the size of the points*
 
 ```{r}
-df |> 
-  dplyr::filter(avg_delay_all_arriving > 0) |>
-  ggplot(aes(x = journey_time_avg, y = avg_delay_all_arriving)) +
-  geom_point(size = 0.5)
+# YOUR CODE HERE
 ```
 
 #### *Change the colour of the points*
 
 ```{r}
-df |> 
-  dplyr::filter(avg_delay_all_arriving > 0) |>
-  ggplot(aes(x = journey_time_avg, y = avg_delay_all_arriving)) +
-  geom_point(colour = "red")
+# YOUR CODE HERE
 ```
 
 #### *Add a title and change the axis labels*
 
 ```{r}
-df |> 
-  dplyr::filter(avg_delay_all_arriving > 0) |>
-  ggplot(aes(x = journey_time_avg, y = avg_delay_all_arriving)) +
-  geom_point(alpha = 0.25) +
-  labs(
-    title = "The longer the ride, the bigger the delay?",
-    x = "Average journey time (min)",
-    y = "Average arrival delay (min)"
-  )
+# YOUR CODE HERE
 ```
 
 ## 3️⃣ Bar plot
@@ -143,41 +116,19 @@ df |>
 #### *Visualize the number of departures from Paris-Nord in 2015, by destination*
 
 ```{r}
-bar_plot <- df |> 
-  dplyr::filter(
-    departure_station == "PARIS NORD",
-    year == 2015
-  ) |> 
-  dplyr::group_by(arrival_station) |> 
-  dplyr::summarise(n = sum(total_num_trips)) |> 
-  ggplot(aes(x = arrival_station, y = n)) +
-  geom_col() # OR geom_bar(stat = "identity")
-
-bar_plot
+# YOUR CODE HERE
 ```
 
 #### *Create a horizontal bar plot*
 
 ```{r}
-bar_plot +
-  coord_flip()
+# YOUR CODE HERE
 ```
 
 #### *Visualize the number of departures from Paris-Nord in 2015 and 2016, by destination*
 
 ```{r}
-grp_bar_plot <- df |> 
-  dplyr::filter(
-    departure_station == "PARIS NORD",
-    year %in% c(2015, 2016)
-  ) |> 
-  dplyr::group_by(year, arrival_station) |> 
-  dplyr::summarise(n = sum(total_num_trips), .groups = "drop") |> 
-  dplyr::mutate(year = factor(year)) |> 
-  ggplot(aes(x = arrival_station, y = n, fill = year)) +
-  geom_col(position = "dodge") 
-
-grp_bar_plot
+# YOUR CODE HERE
 ```
 
 ## 4️⃣ Changing colours
@@ -185,8 +136,7 @@ grp_bar_plot
 #### *Change the bar colours manually*
 
 ```{r}
-grp_bar_plot +
-  scale_fill_manual(values = c("#651C32", "#F2827F"))
+# YOUR CODE HERE
 ```
 
 -   Use `scale_fill_*()` for bar, box, and violin plots.
@@ -195,10 +145,7 @@ grp_bar_plot +
 #### *Change the bar colours using the `RColorBrewer` package*
 
 ```{r}
-display.brewer.all()
-
-grp_bar_plot +
-  scale_fill_brewer(palette = "Pastel1")
+# YOUR CODE HERE
 ```
 
 ## 5️⃣ Line plot
@@ -208,16 +155,7 @@ grp_bar_plot +
 #### *Visualize how the monthly number of trips from Paris to Brest changes throughout the year*
 
 ```{r}
-df <- df |> 
-  mutate(ymd = lubridate::make_date(year, month)) 
-
-df |> 
-  dplyr::filter(
-    departure_station == "PARIS MONTPARNASSE",
-    arrival_station == "BREST"
-  ) |> 
-  ggplot(aes(x = ymd, y = total_num_trips)) +
-  geom_line()
+# YOUR CODE HERE
 ```
 
 #### *Visualize how the monthly number of trips from Paris to multiple cities in Brittany changes throughout the year*
@@ -227,27 +165,7 @@ df |>
 -   Apply a different [theme](https://ggplot2.tidyverse.org/reference/ggtheme.html).
 
 ```{r}
-brittany_cities <- c("RENNES", "BREST", "QUIMPER")  
-
-brittany_plot <- df |> 
-  dplyr::filter(
-    departure_station == "PARIS MONTPARNASSE",
-    arrival_station %in% brittany_cities
-  ) |> 
-  ggplot(aes(x = ymd, y = total_num_trips, colour = arrival_station)) +
-  geom_line() +
-  scale_y_continuous(limits = c(0, NA), expand = c(0, 0)) +
-  scale_x_date(date_breaks = "4 months", date_labels = "%b %Y") +
-  labs(
-    title = "Monthly number of trips from Paris to cities in Brittany",
-    colour = "Arrival station",
-    x = "",
-    y = "Monthly number of trips"
-  ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-brittany_plot
+# YOUR CODE HERE
 ```
 
 -   Choose your scale function based on the type of data: `scale_*_continuous()` for numbers, `scale_*_discrete()` for categories, and `scale_*_date()` for dates.
@@ -257,52 +175,13 @@ brittany_plot
 ## 6️⃣ Overlaying graphs
 
 ```{r}
-# 1. simulate data
-n <- 100
-sim_df <- tibble(
-  x1 = rnorm(n, mean = 250, sd = 15),   # trip length in km
-  e  = rnorm(n),                        # random noise
-  y  = 3 * x1 + e                       # delay increases with trip length
-) %>%
-  select(-e) 
-
-# 2. plot raw data
-ggplot(sim_df, aes(x = x1, y = y)) +
-  geom_point(alpha = 0.5) +
-  labs(
-    x = "Trip length (km)",
-    y = "Delay (minutes)",
-    title = "Simulated train delays vs. trip length"
-  )
-
-# 3. fit linear model
-mod1 <- lm(y ~ x1, data = sim_df)
-
-# 4. add predicted values to tibble
-sim_df <- sim_df |> 
-  mutate(y_hat = predict(mod1))
-
-# 5. overlay line of best fit
-ggplot(sim_df, aes(x = x1, y = y)) +
-  geom_point(alpha = 0.5) +
-  geom_line(aes(y = y_hat), colour = "red", size = 1) +
-  labs(
-    x = "Trip length (km)",
-    y = "Delay (minutes)",
-    title = "Simulatedtrain delays vs. trip length"
-  )
-
-# 6. check model coefficients
-coef(mod1)
+# YOUR CODE HERE
 ```
 
 ## 7️⃣ Saving our masterpieces
 
 ```{r}
-ggsave(
-  filename = "brittany.png",
-  plot = brittany_plot
-)
+# YOUR CODE HERE
 ```
 
 -   If you don't specify the `plot` argument, by default, the function will save the last plot displayed.
@@ -312,25 +191,13 @@ ggsave(
 #### *Create a box plot to visualize the distribution of the monthly number of trips from Paris-Gare-de-Lyon to each international destination*
 
 ```{r}
-df |> 
-  dplyr::filter(
-    departure_station == "PARIS LYON",
-    service == "International"
-  ) |> 
-  ggplot(aes(x = arrival_station, y = total_num_trips)) +
-  geom_boxplot()
+# YOUR CODE HERE
 ```
 
 #### *Change one line of code to display the distributions as a violin plot*
 
 ```{r}
-df |> 
-  dplyr::filter(
-    departure_station == "PARIS LYON",
-    service == "International"
-  ) |> 
-  ggplot(aes(x = arrival_station, y = total_num_trips)) +
-  geom_violin()
+# YOUR CODE HERE
 ```
 
 > While a [box plot](https://en.wikipedia.org/wiki/Box_plot) shows a summary statistics such as mean/median and interquartile ranges, the [violin plot](https://en.wikipedia.org/wiki/Violin_plot) shows the full distribution of the data. The violin plot can be used in multimodal data (more than one peak).
@@ -342,14 +209,7 @@ df |>
 To make it easier to compare patterns across years, use faceting to create subplots (one for each year).
 
 ```{r}
-df |> 
-  dplyr::filter(
-    departure_station == "PARIS MONTPARNASSE",
-    arrival_station %in% brittany_cities
-  ) |> 
-  ggplot(aes(x = month, y = total_num_trips, color = arrival_station)) +
-  geom_line() +
-  facet_wrap(vars(year))
+# YOUR CODE HERE
 ```
 
 ## ⭐ Modify the theme
@@ -357,19 +217,7 @@ df |>
 Theme elements are non-data components of a plot, which include things like the background colour, text size, font, and grid lines. These changes don't alter the underlying data; they only adjust the appearance of the plot. We've already seen how to modify the theme to change the angle of the axis labels. Now let's explore some of the other elements we can customize.
 
 ```{r}
-brittany_plot + # base plot
-  theme(
-    # bold plot title and increase font size
-    plot.title = element_text(face = "bold", size = 16), 
-    # colour x-axis label red and increase font size
-    axis.title.x = element_text(size = 14, color = "red"),
-    # colour y-axis label blue and increase font size
-    axis.title.y = element_text(size = 14, color = "blue"),
-    # colour background green
-    plot.background = element_rect(fill = "green"),
-    # colour major grid lines purple
-    panel.grid.major = element_line(color = "purple", size = 0.5)
-  )
+# YOUR CODE HERE
 ```
 
 -   I don't think this aesthetic makes the plot easier to read, but it does demonstrate just how customizable ggplot2 is 🤠
