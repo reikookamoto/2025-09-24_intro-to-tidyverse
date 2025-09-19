@@ -24,4 +24,3 @@ Atelier méthodologique pour le Département de science politique de l'Universit
 
 -   `dplyr`: files for the first half of the workshop, focusing on data manipulation.
 -   `ggplot2`: files for the second half, focusing on data visualization.
--   `more-ggplot2`: more practice code to deepen your ggplot2 skills!
