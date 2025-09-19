@@ -866,7 +866,7 @@ width="600" />
 
 Awesome work! You’re ready to tackle new data adventures.
 
-## ⭐Bonus: lengthen and widen data
+## ⭐ Lengthen and widen data
 
 The [`tidyr`](https://tidyr.tidyverse.org/) package is another key
 component of the tidyverse. It focuses on reshaping data to ensure it’s
