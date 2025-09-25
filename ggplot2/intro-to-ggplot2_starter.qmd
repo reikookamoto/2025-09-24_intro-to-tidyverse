@@ -8,7 +8,7 @@ execute:
   echo: true
 ---
 
-## 🖌️ Introduction to ggplot2
+## 🖌️ Introduction to ggplot2 (1 min)
 
 > ggplot2 is a system for declaratively creating graphics, based on [The Grammar of Graphics](https://link.springer.com/book/10.1007/0-387-28695-0). You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details.
 
@@ -18,7 +18,7 @@ execute:
 # YOUR CODE HERE
 ```
 
-## 🔍 Exploring the sample data
+## 🔍 Exploring the sample data (5 min)
 
 ![](../imgs/sncf.png){fig-align="center" width="600"}
 
@@ -58,7 +58,7 @@ execute:
 
     -   The last row captures information on trips from **ZURICH** to **PARIS LYON** for **NOVEMBER 2018**.
 
-## 1️⃣ Histogram
+## 1️⃣ Histogram (3 min)
 
 #### *Visualize the distribution of average journey time*
 
@@ -73,7 +73,7 @@ execute:
     -   You add layers with `geom_*()`. Each geom tells R what type of plot to draw (e.g., histogram, scatter plot, line plot).
     -   You connect the layers with `+`. This lets you build up the plot, piece by piece.
 
-## 2️⃣ Scatter plot
+## 2️⃣ Scatter plot (6 min)
 
 #### *Visualize the relationship between average journey time and average arrival delay*
 
@@ -107,7 +107,7 @@ execute:
 # YOUR CODE HERE
 ```
 
-## 3️⃣ Bar plot
+## 3️⃣ Bar plot (6 min)
 
 ![](../imgs/gare-du-nord.png){fig-align="center" width="600"}
 
@@ -131,7 +131,7 @@ execute:
 # YOUR CODE HERE
 ```
 
-## 4️⃣ Changing colours
+## 4️⃣ Changing colours (5 min)
 
 #### *Change the bar colours manually*
 
@@ -148,7 +148,7 @@ execute:
 # YOUR CODE HERE
 ```
 
-## 5️⃣ Line plot
+## 5️⃣ Line plot (8 min)
 
 ![](../imgs/brittany.png){fig-align="center" width="600"}
 
@@ -172,13 +172,13 @@ execute:
 -   Use `theme()` to adjust non-data elements of your plot like titles, labels, and grid lines.
     -   When combining it with a built-in theme like `theme_minimal()`, make sure to call the build-in theme first or else it may override the custom settings you specified with `theme()`.
 
-## 6️⃣ Overlaying graphs
+## 6️⃣ Overlaying graphs (15 min)
 
 ```{r}
 # YOUR CODE HERE
 ```
 
-## 7️⃣ Saving our masterpieces
+## 7️⃣ Saving our masterpieces (2 min)
 
 ```{r}
 # YOUR CODE HERE
