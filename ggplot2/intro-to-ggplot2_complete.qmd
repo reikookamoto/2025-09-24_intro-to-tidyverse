@@ -261,7 +261,7 @@ n <- 100
 sim_df <- tibble(
   x1 = rnorm(n, mean = 250, sd = 15),   # trip length in km
   e  = rnorm(n),                        # random noise
-  y  = 3 * x1 + e                       # delay increases with trip length
+  y  = 0.035 * x1 + e                   # CO2 emission increases with distance
 ) %>%
   select(-e) 
 
@@ -270,8 +270,8 @@ ggplot(sim_df, aes(x = x1, y = y)) +
   geom_point(alpha = 0.5) +
   labs(
     x = "Trip length (km)",
-    y = "Delay (minutes)",
-    title = "Simulated train delays vs. trip length"
+    y = "CO2 emission per passenger (kg)",
+    title = "Simulated CO2 emission vs. trip length"
   )
 
 # 3. fit linear model
@@ -284,11 +284,11 @@ sim_df <- sim_df |>
 # 5. overlay line of best fit
 ggplot(sim_df, aes(x = x1, y = y)) +
   geom_point(alpha = 0.5) +
-  geom_line(aes(y = y_hat), colour = "red", size = 1) +
+  geom_line(aes(y = y_hat), colour = "red", linewidth = 1) +
   labs(
     x = "Trip length (km)",
-    y = "Delay (minutes)",
-    title = "Simulated train delays vs. trip length"
+    y = "CO2 emission per passenger (kg)",
+    title = "Simulated CO2 emission vs. trip length"
   )
 
 # 6. check model coefficients
@@ -367,7 +367,7 @@ brittany_plot + # base plot
     # colour background green
     plot.background = element_rect(fill = "green"),
     # colour major grid lines purple
-    panel.grid.major = element_line(color = "purple", size = 0.5)
+    panel.grid.major = element_line(color = "purple", linewidth = 0.5)
   )
 ```
 

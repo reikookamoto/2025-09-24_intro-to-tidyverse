@@ -393,7 +393,7 @@ n <- 100
 sim_df <- tibble(
   x1 = rnorm(n, mean = 250, sd = 15),   # trip length in km
   e  = rnorm(n),                        # random noise
-  y  = 3 * x1 + e                       # delay increases with trip length
+  y  = 0.035 * x1 + e                   # CO2 emission increases with distance
 ) %>%
   select(-e) 
 
@@ -402,8 +402,8 @@ ggplot(sim_df, aes(x = x1, y = y)) +
   geom_point(alpha = 0.5) +
   labs(
     x = "Trip length (km)",
-    y = "Delay (minutes)",
-    title = "Simulated train delays vs. trip length"
+    y = "CO2 emission per passenger (kg)",
+    title = "Simulated CO2 emission vs. trip length"
   )
 ```
 
@@ -420,16 +420,13 @@ sim_df <- sim_df |>
 # 5. overlay line of best fit
 ggplot(sim_df, aes(x = x1, y = y)) +
   geom_point(alpha = 0.5) +
-  geom_line(aes(y = y_hat), colour = "red", size = 1) +
+  geom_line(aes(y = y_hat), colour = "red", linewidth = 1) +
   labs(
     x = "Trip length (km)",
-    y = "Delay (minutes)",
-    title = "Simulated train delays vs. trip length"
+    y = "CO2 emission per passenger (kg)",
+    title = "Simulated CO2 emission vs. trip length"
   )
 ```
-
-    Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-    ℹ Please use `linewidth` instead.
 
 ![](intro-to-ggplot2_complete_files/figure-commonmark/unnamed-chunk-17-2.png)
 
@@ -439,7 +436,7 @@ coef(mod1)
 ```
 
     (Intercept)          x1 
-     -0.2753248   3.0017162 
+     0.71865048  0.03166282 
 
 ## 7️⃣ Saving our masterpieces
 
@@ -532,12 +529,9 @@ brittany_plot + # base plot
     # colour background green
     plot.background = element_rect(fill = "green"),
     # colour major grid lines purple
-    panel.grid.major = element_line(color = "purple", size = 0.5)
+    panel.grid.major = element_line(color = "purple", linewidth = 0.5)
   )
 ```
-
-    Warning: The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.
-    ℹ Please use the `linewidth` argument instead.
 
 ![](intro-to-ggplot2_complete_files/figure-commonmark/unnamed-chunk-22-1.png)
 
